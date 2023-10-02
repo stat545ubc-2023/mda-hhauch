@@ -84,10 +84,10 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: CHOICE_1\_HERE\
-2: CHOICE_2\_HERE\
-3: CHOICE_3\_HERE\
-4: CHOICE_4\_HERE
+1: cancer_sample
+2: apt_buildings
+3: vancouver_trees
+4: flow_sample
 
 <!----------------------------------------------------------------------------->
 
@@ -99,7 +99,10 @@ And that is exactly the first thing that you will do!
 
 ```{r}
 ### EXPLORE HERE ###
-steam_games
+glimpse(cancer_sample)
+glimpse(apt_buildings)
+glimpse(vancouver_trees)
+glimpse(flow_sample)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -108,12 +111,20 @@ steam_games
 
 <!-------------------------- Start your work below ---------------------------->
 
+*I choose the cancer_sample dataset. My reasoning for doing this is because I am
+currently doing my degree in biological sciences so it is relevant to my field. 
+Additional this is a breat cancer data set and my mom was diagnosed with breast 
+cancer in 2021. It was thankfully caught early and she is in remission. I understand
+the importance of data science within medicine and research so I think it would 
+be interesting if my first (mini) data analysis was within that area.*
+
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a  final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
-
+*Is there a relationship between variables of breast cancer cell nuclei and 
+the ultimate diagnosis?*
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -142,6 +153,65 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+### 1. Plot the distribution of a numeric variable
+
+This exercise is relevant as it allows us to visualize the data. For this milestone I chose to look 
+look at radius_mean so I used that variable for this exercise. I also added color by diagnosis to get 
+some separation in the data and begin to see the relationship between radius_mean and diagnosis. We can 
+also see the count is much higher for lower radius's and for benign diagnoses. 
+
+```{r}
+cancer_sample %>% #chose data set
+  ggplot(aes(radius_mean)) + #as we are looking at dis. of numeric variable I only choose radius_mean
+  geom_histogram(aes(color = diagnosis)) #added color based on diagnosis as a visual aid 
+```
+
+### 4. Explore the Relationship between 2 variables in a plot
+
+I choose this exercise as it allows to to tackle my first research question, investigating 
+if there is a relationship between mean radius of breast cancer cell nuclei and the patients diagnosis.
+In this exercise I can compare one of the variables measured with the diagnosis of the patient to see
+if there is a relationship. Through just this plot we are able to see that the cells from metastatic (M) breast cancer have on average a higher mean nuclei radius. 
+
+
+```{r}
+cancer_sample %>% #choosing the data set
+  ggplot(aes(diagnosis, radius_mean)) + #I selected to compare diagnosis with radius mean
+  geom_jitter(alpha = 0.5, aes(color = diagnosis))+ #I used a jitter blot as it would allow us to #visualize the relationship radius mean has with both diagnosises and also compare the diagnoses to each #other 
+  theme_minimal()+ 
+  theme(legend.position="none") #I removed the color legend as I do not think it is needed as
+  #the colors are only for aesthetic purposes 
+  
+```
+
+
+### 5. Filter observations in your data according to your own criteria.
+
+After establishing if there is a relationship between some of the variables and the diagnosis of the 
+patient I think I will want to look further into the patients diagnosed with metastatic cancer so I 
+filtered the data to only show data from patients with metastatic cancer. 
+
+```{r}
+M_diagnosis <- filter(cancer_sample, diagnosis == "M") #filtering the dataset to just those who were #diagnosed with metastatic cancer
+head(M_diagnosis) #just to see the new tibble
+```
+
+
+
+### 6. Use a boxplot to look at the frequency of different observations within a single variable.
+
+This is relevant to this data as there there is large range in each variable. I decided to apply the box plot to the plot I made for exercise 4 to better understand the distribution of the data for both diagnosis.  
+
+```{r}
+cancer_sample %>%
+  ggplot(aes(diagnosis, radius_mean)) +
+  geom_jitter(alpha = 0.5, aes(color = diagnosis))+
+  theme_minimal()+
+  geom_boxplot(aes(color = diagnosis), alpha = 0) + #I used alpha to make the boxes transparent so they 
+  #didn't block any of the data points 
+  theme(legend.position="none")
+```
+
 
 <!----------------------------------------------------------------------------->
 
@@ -150,6 +220,12 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 **(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4).  Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below. 
 
 <!--- *****START HERE***** --->
+
+1. What is the relationship between the size of cells and diagnosis? 
+2. What is the relationship between the texture/smoothness of the cell and diagnosis? 
+3. What is the relationship between the symmetry of the cell and diagnosis?
+4. What is the relationship between the concavity of the cell and diagnosis? 
+
 
 <!----------------------------->
 

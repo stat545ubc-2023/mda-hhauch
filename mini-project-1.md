@@ -385,7 +385,7 @@ sufficient comments for a reader to understand your reasoning and code.
 ### 1. Plot the distribution of a numeric variable
 
 This exercise is relevant as it allows us to visualize the data. For
-this milestone I chose to look at radius_mean as I used that variable
+this excercise I chose to look at radius_mean as I used that variable
 for this milestone. I also added color by diagnosis to get some
 separation in the data and begin to see the relationship between
 radius_mean and diagnosis. We can also see the count is much higher for

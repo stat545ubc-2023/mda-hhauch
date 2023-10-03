@@ -3,11 +3,11 @@ This repository is a **Mini Data Analysis** by *Hannah Hauch* analysing the canc
 
 **Within this repository there is:** 
 1. mini-data-project-1.rmd file
-   *This was editing in Rstudio
-2. mini-data-project-1.md
-  *This is the markdown file showing the data analysis from the .rmd file
-3. README.md
-  *This file!
+* This was editing in Rstudio
+3. mini-data-project-1.md
+* This is the markdown file showing the data analysis from the .rmd file
+4. README.md
+* This file!
 :octocat: 
 
 

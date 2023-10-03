@@ -297,7 +297,7 @@ to choose this one? Briefly explain your choice below.
 
 *I choose the cancer_sample dataset. My reasoning for doing this is
 because I am currently doing my degree in biological sciences so it is
-relevant to my field. Additional this is a breat cancer data set and my
+relevant to my field. Additional this is a breast cancer data set and my
 mom was diagnosed with breast cancer in 2021. It was thankfully caught
 early and she is in remission. I understand the importance of data
 science within medicine and research so I think it would be interesting

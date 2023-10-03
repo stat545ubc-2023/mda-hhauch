@@ -297,11 +297,11 @@ to choose this one? Briefly explain your choice below.
 
 *I choose the cancer_sample dataset. My reasoning for doing this is
 because I am currently doing my degree in biological sciences so it is
-relevant to my field. Additional this is a breast cancer data set and my
-mom was diagnosed with breast cancer in 2021. It was thankfully caught
-early and she is in remission. I understand the importance of data
-science within medicine and research so I think it would be interesting
-if my first (mini) data analysis was within that area.*
+relevant to my field. Additionally, this is a breast cancer data set and
+my mom was diagnosed with breast cancer in 2021. It was thankfully
+caught early and she is in remission. I understand the importance of
+data science within medicine and research so I think it would be
+interesting if my first (mini) data analysis was within that area.*
 
 <!----------------------------------------------------------------------------->
 
@@ -385,8 +385,8 @@ sufficient comments for a reader to understand your reasoning and code.
 ### 1. Plot the distribution of a numeric variable
 
 This exercise is relevant as it allows us to visualize the data. For
-this milestone I chose to look look at radius_mean so I used that
-variable for this exercise. I also added color by diagnosis to get some
+this milestone I chose to look at radius_mean as I used that variable
+for this milestone. I also added color by diagnosis to get some
 separation in the data and begin to see the relationship between
 radius_mean and diagnosis. We can also see the count is much higher for
 lower radius’s and for benign diagnoses.
@@ -394,17 +394,15 @@ lower radius’s and for benign diagnoses.
 ``` r
 cancer_sample %>% #chose data set
   ggplot(aes(radius_mean)) + #as we are looking at dis. of numeric variable I only choose radius_mean
-  geom_histogram(aes(color = diagnosis)) #added color based on diagnosis as a visual aid 
+  geom_histogram(aes(color = diagnosis), bins=30) #added color based on diagnosis as a visual aid 
 ```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](mini-project-1_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ### 4. Explore the Relationship between 2 variables in a plot
 
 I choose this exercise as it allows to to tackle my first research
-question, investigating if there is a relationship between mean radius
+question by investigating if there is a relationship between mean radius
 of breast cancer cell nuclei and the patients diagnosis. In this
 exercise I can compare one of the variables measured with the diagnosis
 of the patient to see if there is a relationship. Through just this plot
@@ -456,10 +454,9 @@ head(M_diagnosis) #just to see the new tibble
 
 ### 6. Use a boxplot to look at the frequency of different observations within a single variable.
 
-This is relevant to this data as there there is large range in each
-variable. I decided to apply the box plot to the plot I made for
-exercise 4 to better understand the distribution of the data for both
-diagnosis.
+This is relevant to this data as there is large range in each variable.
+I decided to apply the box plot to the plot I made for exercise 4 to
+better understand the distribution of the data for both diagnosis.
 
 ``` r
 cancer_sample %>%

@@ -155,7 +155,7 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 <!-------------------------- Start your work below ---------------------------->
 ### 1. Plot the distribution of a numeric variable
 
-This exercise is relevant as it allows us to visualize the data. For this milestone I chose to 
+This exercise is relevant as it allows us to visualize the data. For this excercise I chose to 
 look at radius_mean as I used that variable for this milestone. I also added color by diagnosis to get 
 some separation in the data and begin to see the relationship between radius_mean and diagnosis. We can 
 also see the count is much higher for lower radius's and for benign diagnoses. 

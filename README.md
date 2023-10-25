@@ -13,6 +13,7 @@ This repository is a **Mini Data Analysis** by *Hannah Hauch* analysing the canc
   * mini-data-project-2.md: This is the markdown file showing the data analysis from the .rmd file
   * mini-project-2_files/figure_gfm: Folder containing the figures seen in the mark down file
 3. Output
+  *README
   * area_mean_levels.csv: cvs with summary table (area_mean_levels) from task 1
   *area_mean_model.RDS: R binary file with model object (symmetry_mean_model) from task 3
 

@@ -15,7 +15,7 @@ This repository is a **Mini Data Analysis** by *Hannah Hauch* analysing the canc
 3. Output
   * README
   * area_mean_levels.csv: cvs with summary table (area_mean_levels) from task 1
-  *area_mean_model.RDS: R binary file with model object (symmetry_mean_model) from task 3
+  * area_mean_model.RDS: R binary file with model object (symmetry_mean_model) from task 3
 
 **README.md**
   * This file you are reading! 

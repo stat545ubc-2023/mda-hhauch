@@ -155,7 +155,7 @@ for!
 #### Summarizing: 3
 
 This task allows us to categorize the different sizes of the nuclei into
-categories. This would allow us to better visualize the data to see if
+categories. This will allow us to better visualize the data to see if
 there is a correlation between the size (small vs. large) and the
 diagnosis. The sizes were chosen based off of the mean, first quartile,
 and third quartile of the benign cells which were identified using the
@@ -163,14 +163,14 @@ summary function on the area_mean for both metastatic and benign
 patients.
 
 ``` r
-area_mean_levels <- cancer_sample %>%
-mutate(area_mean_level = case_when (area_mean < 378 ~"very small",
+area_mean_levels <- cancer_sample %>% #creating a new variable 
+mutate(area_mean_level = case_when (area_mean < 378 ~"very small", #within the new variable creating new column that coincide with my chosen boundaries
                               area_mean < 462 ~ "small",
                               area_mean < 551 ~ "large",
                               TRUE ~ "very large"))%>%
-select(diagnosis, area_mean, area_mean_level) 
+select(diagnosis, area_mean, area_mean_level) #selecting for only the relevant columns 
 
-print(area_mean_levels)
+print(area_mean_levels) #showing the tibble
 ```
 
     ## # A tibble: 569 × 3
@@ -200,13 +200,13 @@ than for B cells we can see that most of the cells for metastatic
 patients can be categorized as “very large”.
 
 ``` r
-R1_graph <- area_mean_levels %>%
-ggplot(aes(diagnosis, area_mean))+
-geom_jitter(alpha = 0.5, aes(color = area_mean_level)) +
-geom_boxplot(alpha = 0) +
-  ylab("Mean Area of Nuclei") +
-  ggtitle("Mean Area of Nuclei For Benign and Metastatic Cells")+
-  theme(legend.title = element_blank())
+R1_graph <- area_mean_levels %>% #creating new variable 
+ggplot(aes(diagnosis, area_mean))+ 
+geom_jitter(alpha = 0.5, aes(color = area_mean_level)) + #choosing a jitter plot and assigning the colors to the different sizes of nuclei area
+geom_boxplot(alpha = 0) + #adding clear boxplot so it doesn't block points 
+  ylab("Mean Area of Nuclei") + #changing y axis label to a clearer title
+  ggtitle("Mean Area of Nuclei For Benign and Metastatic Cells")+ #adding a title
+  theme(legend.title = element_blank()) #I though the legend title was not helpful so I removed it
 
 print(R1_graph)
 ```
@@ -221,22 +221,23 @@ In this task I computed the range, mean, median, standard deviation
 (sd), and IQR for both texture and smoothness of the nuclei against the
 diagnosis categorical variable. Although the task asks to compute for
 one numerical variable for this question it makes sense to apply to both
-texture and smoothness. This tasks shows up the overall differences in
+texture and smoothness. This tasks shows us the overall differences in
 the numerical values for both metastatic and benign patients. For
 mean_texture, we can see that for metastatic cases the mean, median,
 max, and min texture is higher than for benign cases. We can also see
 that the IQR and sd are relatively close showing that the variance from
-the mean in both data sets are similar.
+the mean in both data sets are similar. Interestingly for
+mean_smoothness the max_smoothness is higher for benign cells.
 
 ``` r
 summarize_cancer_texture <- cancer_sample %>%
-group_by(diagnosis) %>%
-  summarize(mean_texture = mean(texture_mean, na.rm = TRUE),
-  median_texture = median(texture_mean, na.rm = TRUE),
-  max_texture = max(texture_mean, na.rm = TRUE),
-  min_texture = min(texture_mean, na.rm = TRUE),
-  IRQ_texture = IQR(texture_mean, na.rm = TRUE),
-  sd_texture = sd(texture_mean, na.rm = TRUE))
+group_by(diagnosis) %>% #grouping by diagnosis to compare data between benign and metastatic
+  summarize(mean_texture = mean(texture_mean, na.rm = TRUE), #creates new data fram and finding mean
+  median_texture = median(texture_mean, na.rm = TRUE), #finding median
+  max_texture = max(texture_mean, na.rm = TRUE), #finding max
+  min_texture = min(texture_mean, na.rm = TRUE), #finding min
+  IRQ_texture = IQR(texture_mean, na.rm = TRUE), #finding IDR
+  sd_texture = sd(texture_mean, na.rm = TRUE)) #finding sd 
 
 head(summarize_cancer_texture)
 ```
@@ -250,13 +251,13 @@ head(summarize_cancer_texture)
 
 ``` r
 summarize_cancer_smoothness <- cancer_sample %>%
-group_by(diagnosis) %>%
-  summarize(mean_smoothness = mean(smoothness_mean, na.rm = TRUE),
-  median_smoothness = median(smoothness_mean, na.rm = TRUE),
-  max_smoothness = max(smoothness_mean, na.rm = TRUE),
-  min_smoothness = min(smoothness_mean, na.rm = TRUE),
-  IRQ_smoothness = IQR(smoothness_mean, na.rm = TRUE),
-  sd_smoothness = sd(smoothness_mean, na.rm = TRUE))
+group_by(diagnosis) %>% #grouping by diagnosis to compare data between benign and metastatic
+  summarize(mean_smoothness = mean(smoothness_mean, na.rm = TRUE), #creates new data fram and finding mean
+  median_smoothness = median(smoothness_mean, na.rm = TRUE), #finding median
+  max_smoothness = max(smoothness_mean, na.rm = TRUE),#finding max
+  min_smoothness = min(smoothness_mean, na.rm = TRUE),#finding min
+  IRQ_smoothness = IQR(smoothness_mean, na.rm = TRUE),#finding IDR
+  sd_smoothness = sd(smoothness_mean, na.rm = TRUE))#finding sd 
 
 head(summarize_cancer_smoothness)
 ```
@@ -276,41 +277,44 @@ the mean smoothness is similar between diagnosis with metastatic cells
 having slightly higher value. However, for mean texture of the nuclei it
 is clear that benign cells seem to have a lower mean texture than
 metastatic cells. Adding the labels and log scale makes the graph much
-easier to read.
+easier to read and prevents data points for blocking each other.
 
 ``` r
 R2_graph <- cancer_sample %>% 
-  ggplot(aes(texture_mean, smoothness_mean)) + 
-  geom_point(alpha = 0.3, aes(color = diagnosis))+
+  ggplot(aes(texture_mean, smoothness_mean)) + #choosing graph variables
+  geom_point(alpha = 0.3, aes(color = diagnosis))+ #using scatter plot and adjusting alpha so points are more transparent. The color coincides with the diagnosis to show the difference
   theme_minimal()+ 
-  scale_x_log10("Mean Texture of Cell")+
-  scale_y_log10("Mean Smoothness of Cell") +
-  ggtitle("Mean Texture and Mean Smoothness of Nuclei for Benign and Metastatic Cells ")
+  scale_x_log10("Mean Texture of Cell")+ #making the x axis log scale and adding axis title
+  scale_y_log10("Mean Smoothness of Cell") + #making the y axis log scale and adding axis title
+  ggtitle("Mean Texture and Mean Smoothness of Nuclei for Benign and Metastatic Cells ") #adding title 
 
 print(R2_graph)
 ```
 
 ![](mini-project-2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-\###3. What is the relationship between the symmetry of the cell and
-diagnosis? \#### Summarizing: 1 In this task I computed the range, mean,
-median, standard deviation (sd), and IQR for the symmetry of the nuclei
-against the diagnosis categorical variable. This tasks shows up the
-overall differences in the numerical values for both metastatic and
-benign patients. For mean_symmetry, we can see that for metastatic cases
-the mean, median, max, and min texture is slightly higher than for
-benign cases. We can also see that the IQR and sd are relatively close
-showing that the variance from the mean in both data sets are similar.
+### 3. What is the relationship between the symmetry of the cell and diagnosis?
+
+#### Summarizing: 1
+
+In this task I computed the range, mean, median, standard deviation
+(sd), and IQR for the symmetry of the nuclei against the diagnosis
+categorical variable. This tasks shows up the overall differences in the
+numerical values for both metastatic and benign patients. For
+mean_symmetry, we can see that for metastatic cases the mean, median,
+max, and min texture is slightly higher than for benign cases. We can
+also see that the IQR and sd are relatively close showing that the
+variance from the mean in both data sets are similar.
 
 ``` r
 summarize_cancer_symmetry <- cancer_sample %>%
-group_by(diagnosis) %>%
-  summarize(mean_symmetry = mean(symmetry_mean, na.rm = TRUE),
-  median_symmetry = median(symmetry_mean, na.rm = TRUE),
-  max_symmetry = max(symmetry_mean, na.rm = TRUE),
-  min_symmetry = min(symmetry_mean, na.rm = TRUE),
-  IRQ_symmetry = IQR(symmetry_mean, na.rm = TRUE),
-  sd_symmetry = sd(symmetry_mean, na.rm = TRUE))
+group_by(diagnosis) %>% #grouping by diagnosis to compare data between benign and metastatic
+  summarize(mean_symmetry = mean(symmetry_mean, na.rm = TRUE), #creates new data fram and finding mean
+  median_symmetry = median(symmetry_mean, na.rm = TRUE), #median
+  max_symmetry = max(symmetry_mean, na.rm = TRUE), #max
+  min_symmetry = min(symmetry_mean, na.rm = TRUE), #min
+  IRQ_symmetry = IQR(symmetry_mean, na.rm = TRUE), #IQR
+  sd_symmetry = sd(symmetry_mean, na.rm = TRUE)) #sd
 
 head(summarize_cancer_symmetry)
 ```
@@ -332,13 +336,13 @@ in metastatic cells.
 
 ``` r
 R3_graph <- cancer_sample %>% #choosing the data set
-  ggplot(aes(diagnosis, symmetry_mean)) + #I selected to compare diagnosis with radius mean
-  geom_jitter(alpha = 0.5, aes(color = diagnosis))+ #I used a jitter blot as it would allow us to #visualize the relationship radius mean has with both diagnosises and also compare the diagnoses to each #other 
+  ggplot(aes(diagnosis, symmetry_mean)) + #I selected to compare diagnosis with symmetry mean
+  geom_jitter(alpha = 0.5, aes(color = diagnosis))+ #I used a jitter blot as it would allow us to visualize the relationship symmetry mean has with both diagnosises and also compare the diagnoses to each other 
   theme_minimal()+ 
-  geom_boxplot(aes(color = diagnosis), alpha = 0)+
-  ylab("Mean Symmetry of Nuclei") +
-  ggtitle("Mean Symmetry of Nuclei For Benign and Metastatic Cells")+
-  theme(legend.position="none")
+  geom_boxplot(aes(color = diagnosis), alpha = 0)+ #made the colors of the box plot correspond with the side they were on bby diagnosis and made them transparent so they wouldn't block data 
+  ylab("Mean Symmetry of Nuclei") + #adding y axis label
+  ggtitle("Mean Symmetry of Nuclei For Benign and Metastatic Cells")+ #adding title
+  theme(legend.position="none") #don't think the legend adds any new information that isn't already shwon by the axis 
 
 
 print(R3_graph)
@@ -346,26 +350,27 @@ print(R3_graph)
 
 ![](mini-project-2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-\###4. What is the relationship between the concavity of the cell and
-diagnosis? In this task I computed the range, mean, median, standard
-deviation (sd), and IQR for the concavity of the nuclei against the
-diagnosis categorical variable. This tasks shows up the overall
-differences in the numerical values for both metastatic and benign
-patients. For mean_concavity, we can see that for metastatic cases the
-mean, median and min texture is higher than for benign cases. The max
-convacity is only slightly higher for metastatic cells. We can also see
-that the IQR and sd are slighly different with the metastatic data
-having a higher IQR and sd.
+### 4. What is the relationship between the concavity of the cell and diagnosis?
+
+In this task I computed the range, mean, median, standard deviation
+(sd), and IQR for the concavity of the nuclei against the diagnosis
+categorical variable. This tasks shows up the overall differences in the
+numerical values for both metastatic and benign patients. For
+mean_concavity, we can see that for metastatic cases the mean, median
+and min texture is higher than for benign cases. The max convacity is
+only slightly higher for metastatic cells. We can also see that the IQR
+and sd are slighly different with the metastatic data having a higher
+IQR and sd.
 
 ``` r
 summarize_cancer_concavity <- cancer_sample %>%
-group_by(diagnosis) %>%
-  summarize(Mean_concavity = mean(concavity_mean, na.rm = TRUE),
-  median_concavity = median(concavity_mean, na.rm = TRUE),
-  max_concavity = max(concavity_mean, na.rm = TRUE),
-  min_concavity = min(concavity_mean, na.rm = TRUE),
-  IRQ_concavity = IQR(concavity_mean, na.rm = TRUE),
-  sd_concavity = sd(concavity_mean, na.rm = TRUE))
+group_by(diagnosis) %>% #grouping by diagnosis to compare data between benign and metastatic
+  summarize(Mean_concavity = mean(concavity_mean, na.rm = TRUE), #creates new data fram and finding mean
+  median_concavity = median(concavity_mean, na.rm = TRUE), #median
+  max_concavity = max(concavity_mean, na.rm = TRUE), #max
+  min_concavity = min(concavity_mean, na.rm = TRUE), #min
+  IRQ_concavity = IQR(concavity_mean, na.rm = TRUE), #IQR
+  sd_concavity = sd(concavity_mean, na.rm = TRUE)) #sd
 
 head(summarize_cancer_concavity)
 ```
@@ -388,13 +393,13 @@ diagnosis that have high mean concavity.
 
 ``` r
 R4_graph <- cancer_sample %>% #choosing the data set
-  ggplot(aes(diagnosis, concavity_mean)) + #I selected to compare diagnosis with radius mean
+  ggplot(aes(diagnosis, concavity_mean)) + #I selected to compare diagnosis with concavity mean
   geom_jitter(alpha = 0.5, aes(color = diagnosis))+ #I used a jitter blot as it would allow us to #visualize the relationship radius mean has with both diagnosises and also compare the diagnoses to each #other 
   theme_minimal()+ 
-  geom_boxplot(aes(color = diagnosis), alpha = 0)+
-  ylab("Mean Concavity of Nuclei") +
-  ggtitle("Mean Convavity of Nuclei For Benign and Metastatic Cells") +
-  theme(legend.position="none")
+  geom_boxplot(aes(color = diagnosis), alpha = 0)+ #made the colors of the box plot correspond with the side they were on bby diagnosis and made them transparent so they wouldn't block data 
+  ylab("Mean Concavity of Nuclei") + #y axis label 
+  ggtitle("Mean Convavity of Nuclei For Benign and Metastatic Cells") + #title
+  theme(legend.position="none") #don't think the legend adds any new information that isn't already shwon by the axis 
 
 print(R4_graph)
 ```
@@ -413,8 +418,10 @@ research questions are yielding interesting results?
 
 <!------------------------- Write your answer here ---------------------------->
 
+### Reflecting on task 1
+
 Based on the summarizing and graphing activities I am closer to
-answering the research question. In the summarizing results for all
+answering the research questions. In the summarizing results for all
 questions we can see that there is a difference in these nuclei
 attributes between patients with metastatic cancer and benign cancer. We
 can visualize this differences in the graphs produced. For example, for
@@ -455,7 +462,7 @@ pick 8, and explain whether the data is untidy or tidy.
 Based on the definition above my data is tidy. For example, the first 8
 variables: ID, diagnosis, radius_mean, texture_mean, perimeter_mean,
 area_mean, smoothness_mean, and compactness_mean, are all a different
-variable either about the patients or the cells they observed. Each row
+variables either about the patients or the cells they observed. Each row
 for all these columns look at the mean of an attribute of the cell,
 which would have been observed and then calculated. Each cell within the
 rows contains a value of some kind either it be the mean of an attribute
@@ -479,11 +486,12 @@ and “after”.
 As mentioned above the originally data is tidy. To untidy it I made the
 tibble ‘longer’ by putting the different variables from the columns
 (e.g. area_mean, radius_mean, texture_mean, etc.) into a single column
-titled name. The value of the variables are then put into column called
-value. This makes the data much harder to use and more complicated. To
-retidy it to its original state I made the tibble ‘wider’ and made new
-variables with the name of the variables from the name column and the
-values of the new variables from the value column.
+titled *name*. The value of the variables are then put into column
+called *value*. This makes the data much harder to use and more
+complicated. To retidy it to its original state I made the tibble
+‘wider’ and made new variables with the name of the variables from the
+*name* column and the values of the new variables from the *value*
+column.
 
 ``` r
 untidy_cancer_sample <- cancer_sample %>%
@@ -574,17 +582,16 @@ data, one for each research question.)
 <!--------------------------- Start your work below --------------------------->
 
 ``` r
-task_3_version_area_symmetry <- cancer_sample %>%
-filter(is.numeric(c(area_mean,symmetry_mean))) %>%
-select(c(diagnosis, area_mean, symmetry_mean)) %>%
-mutate(area_mean_level = case_when (area_mean < 378 ~"very small",
+task_3_version_area_symmetry <- cancer_sample %>% #creating new variable and choosing data set
+filter(is.numeric(c(area_mean,symmetry_mean))) %>% #filter for only numeric values
+select(c(diagnosis, area_mean, symmetry_mean)) %>% #selecting our variables of intrest
+mutate(area_mean_level = case_when (area_mean < 378 ~"very small", #creating a new coloum related to the size of the cell 
                               area_mean < 462 ~ "small",
                               area_mean < 551 ~ "large",
                               TRUE ~ "very large")) %>%
-relocate("diagnosis", "symmetry_mean", "area_mean", "area_mean_level")
+relocate("diagnosis", "symmetry_mean", "area_mean", "area_mean_level") #rearranging the tibble so it is clear 
 
                               
-
 head(task_3_version_area_symmetry)
 ```
 
@@ -638,7 +645,7 @@ specifics in STAT 545.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
-symmetry_mean_model <- t.test(symmetry_mean ~ diagnosis, data = task_3_version_area_symmetry)
+symmetry_mean_model <- t.test(symmetry_mean ~ diagnosis, data = task_3_version_area_symmetry) #t-test on the symmetry_mean based on the diagnosis taking the data from the tibble from task 2.3
 
 print(symmetry_mean_model)
 ```
@@ -680,12 +687,22 @@ the data is statistically significant. Based on the t-test we can reject
 the null hypothesis and say that the data is statistially significant.
 
 ``` r
-library(broom)
+library(broom) #loading broom package 
 ```
 
 ``` r
-symmetry_mean_model <- t.test(symmetry_mean ~ diagnosis, data = task_3_version_area_symmetry)
+symmetry_mean_model <- t.test(symmetry_mean ~ diagnosis, data = task_3_version_area_symmetry) #t-test
 
+tidy(symmetry_mean_model) #put t-test in tibble using broom package
+```
+
+    ## # A tibble: 1 × 10
+    ##   estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+    ##      <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>    <dbl>     <dbl>
+    ## 1  -0.0187     0.174     0.193     -8.11 5.96e-15      406.  -0.0233   -0.0142
+    ## # ℹ 2 more variables: method <chr>, alternative <chr>
+
+``` r
 print(symmetry_mean_model)
 ```
 
@@ -700,16 +717,6 @@ print(symmetry_mean_model)
     ## sample estimates:
     ## mean in group B mean in group M 
     ##        0.174186        0.192909
-
-``` r
-tidy(symmetry_mean_model)
-```
-
-    ## # A tibble: 1 × 10
-    ##   estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
-    ##      <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>    <dbl>     <dbl>
-    ## 1  -0.0187     0.174     0.193     -8.11 5.96e-15      406.  -0.0233   -0.0142
-    ## # ℹ 2 more variables: method <chr>, alternative <chr>
 
 <!----------------------------------------------------------------------------->
 
@@ -734,7 +741,7 @@ file in your `output` folder. Use the `here::here()` function.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
-library(here)
+library(here) #loading here package
 ```
 
     ## here() starts at /Users/hannahhauch/MDA
@@ -764,7 +771,7 @@ select(area_mean_levels, diagnosis, area_mean, area_mean_level)
     ## # ℹ 559 more rows
 
 ``` r
-write_csv(area_mean_levels, here("Output", "area_mean_levels.csv"))
+write_csv(area_mean_levels, here("Output", "area_mean_levels.csv")) #writing csv and putting it into output folder
 ```
 
 <!----------------------------------------------------------------------------->
@@ -780,9 +787,9 @@ Use the functions `saveRDS()` and `readRDS()`.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
-saveRDS(symmetry_mean_model, here('Output', "area_mean_model.RDS"))
+saveRDS(symmetry_mean_model, here('Output', "area_mean_model.RDS")) #writing to a R binary file and saving in output folder
 
-readRDS(here('Output', "area_mean_model.RDS"))
+readRDS(here('Output', "area_mean_model.RDS")) #loading the RDS
 ```
 
     ## 
